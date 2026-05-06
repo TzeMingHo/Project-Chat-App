@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+#chat-display-area {
+    background-color: aliceblue;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 80%;
+    height: 68vh;
+}
+
+#message-form {
+    border: 1px solid;
+    width: 80%;
+    height: 20vh;
+    padding: 2px;
+}
+
+#message-input {
+    height: 11.5vh;
+    width: 100%;
+    padding: 8px;
+}
+
+#signature-and-send-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+#user-name-input {
+    padding: 5px;
+}
+
+#message-submit-button {
+    padding: 5px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: aliceblue;
+}
