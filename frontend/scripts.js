@@ -1,3 +1,9 @@
+const state = {
+  messageString: "",
+  userString: ""
+}
+
+
 function createEmptyMessage() {
   const emptyMessage = document.createElement("p");
   emptyMessage.textContent("Everyone is being quite, say something.");
@@ -37,6 +43,15 @@ async function chatDisplay() {
   }
 }
 
+function messageInputReset() {
+  state.messageString = "";
+  state.userString = "";
+  const messageInputElement = document.getElementById("message-input");
+  const userInputElement = document.getElementById("user-name-input");
+  messageInputElement.value = "";
+  userInputElement.value = "";
+}
+
 async function postingMessage(messageString, userString) {
   try {
     const response = await fetch("http://localhost:4000", {
@@ -52,7 +67,8 @@ async function postingMessage(messageString, userString) {
     if (response.ok) {
       const confirmMessage = await response.text();
       if (confirmMessage == "sent") {
-        chatDisplay()
+        chatDisplay();
+        messageInputReset();
       }
     }
   } catch (error) {
@@ -64,6 +80,7 @@ async function messageSubmitHandler(e, messageString, userString) {
   e.preventDefault();
   if (!messageString || !userString) {
     console.error(`Message or user cannot be empty.`)
+    window.alert("Message or user cannot be empty.")
     return;
   } else {
     await postingMessage(messageString, userString)
@@ -71,18 +88,19 @@ async function messageSubmitHandler(e, messageString, userString) {
 }
 
 function messageInputHandler() {
-  let messageString; 
-  document.getElementById("message-input").addEventListener("input", (e) => {
-    messageString = e.target.value.trim();
+  
+  const messageInputElement = document.getElementById("message-input")
+  messageInputElement.addEventListener("input", (e) => {
+    state.messageString = e.target.value.trim();
   })
 
-  let userString;
-  document.getElementById("user-name-input").addEventListener("input", (e) => {
-    userString = e.target.value.trim();
+  const userInputElement = document.getElementById("user-name-input")
+  userInputElement.addEventListener("input", (e) => {
+    state.userString = e.target.value.trim();
   })
 
-  document.getElementById("message-submit-button").addEventListener("click", (e) => {
-    messageSubmitHandler(e, messageString, userString)
+  document.getElementById("message-submit-button").addEventListener("click", async (e) => {
+    await messageSubmitHandler(e, state.messageString, state.userString)
   })
 }
 
