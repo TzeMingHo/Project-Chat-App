@@ -11,6 +11,32 @@
     border-radius: 5px;
     width: 80%;
     height: 68vh;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chat-thread {
+    background-color: white;
+    border: navy solid 1.5px;
+    max-width: 90%;
+    border-radius: 5px;
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.message-in-thread {
+    height: 8vh;
+}
+
+.user-name-in-thread {
+    background-color: navy;
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5px;
 }
 
 #message-form {

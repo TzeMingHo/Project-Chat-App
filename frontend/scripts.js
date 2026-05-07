@@ -13,9 +13,12 @@ function createEmptyMessage() {
 function createMessageThreads(chatHistoryArray) {
   return chatHistoryArray.map(({ message, user }) => {
     const chatThread = document.createElement("section");
+    chatThread.className = "chat-thread";
     const messageElement = document.createElement("p");
+    messageElement.className = "message-in-thread";
     messageElement.textContent = message;
     const userElement = document.createElement("p");
+    userElement.className = "user-name-in-thread";
     userElement.textContent = user;
     chatThread.append(messageElement, userElement);
     return chatThread;
