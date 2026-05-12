@@ -1,6 +1,7 @@
 const state = {
   messageString: "",
-  userString: ""
+  userString: "",
+  backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io"
 }
 
 
@@ -27,7 +28,7 @@ function createMessageThreads(chatHistoryArray) {
 
 async function fetchChatHistory() {
   try {
-    const response = await fetch("http://localhost:4000");
+    const response = await fetch(state.backendURL);
     const chatHistoryArray = await response.json();
     return chatHistoryArray;
   } catch (error) {
@@ -57,7 +58,7 @@ function messageInputReset() {
 
 async function postingMessage(messageString, userString) {
   try {
-    const response = await fetch("http://localhost:4000", {
+    const response = await fetch(state.backendURL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
