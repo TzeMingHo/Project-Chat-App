@@ -1,7 +1,8 @@
 const state = {
   messageString: "",
   userString: "",
-  backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io"
+  // backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io"
+  backendURL: "http://localhost:4000",
 }
 
 
@@ -12,16 +13,26 @@ function createEmptyMessage() {
 }
 
 function createMessageThreads(chatHistoryArray) {
-  return chatHistoryArray.map(({ message, user }) => {
+  return chatHistoryArray.map(({ message, user, timestamp }) => {
     const chatThread = document.createElement("section");
     chatThread.className = "chat-thread";
+
     const messageElement = document.createElement("p");
     messageElement.className = "message-in-thread";
     messageElement.textContent = message;
+
+    const timestampElement = document.createElement("p");
+    timestampElement.className = "timestamp-in-thread";
+    timestampElement.textContent = new Date(timestamp).toLocaleString();
     const userElement = document.createElement("p");
     userElement.className = "user-name-in-thread";
     userElement.textContent = user;
-    chatThread.append(messageElement, userElement);
+
+    const infoElement = document.createElement("div");
+    infoElement.className = "info-in-thread";
+    infoElement.append(timestampElement, userElement);
+
+    chatThread.append(messageElement, infoElement);
     return chatThread;
   });
 }
@@ -58,6 +69,7 @@ function messageInputReset() {
 
 async function postingMessage(messageString, userString) {
   try {
+    const newTimestamp = new Date().getTime();
     const response = await fetch(state.backendURL, {
       method: "POST",
       headers: {
@@ -65,7 +77,8 @@ async function postingMessage(messageString, userString) {
       },
       body: JSON.stringify({
         message: messageString,
-        user: userString
+        user: userString,
+        timestamp: newTimestamp
       })
     })
     if (response.ok) {

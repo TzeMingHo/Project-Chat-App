@@ -31,8 +31,20 @@
     height: 8vh;
 }
 
-.user-name-in-thread {
+.info-in-thread {
     background-color: navy;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.timestamp-in-thread {
+    font-size: small;
+    display: flex;
+    align-items: center;
+}
+
+.user-name-in-thread {
     color: white;
     display: flex;
     justify-content: flex-end;

@@ -10,6 +10,7 @@ const chatHistory = [
   {
     message: "Welcome to the channel.",
     user: "System",
+    timestamp: new Date().getTime(),
   },
 ];
 
@@ -17,9 +18,14 @@ app.get("/", (req, res) => {
   res.json(chatHistory);
 });
 
+app.get("/message", (req, res) => {
+  const {since} = req.query;
+
+})
+
 app.post("/", (req, res) => {
   try {
-    let { message, user } = req.body;
+    let { message, user, timestamp } = req.body;
     if (!message?.trim() || !user?.trim()) {
       res.status(406).json({ error: "Empty message or user are not allowed." });
       return;
@@ -27,6 +33,7 @@ app.post("/", (req, res) => {
       chatHistory.push({
         message: message,
         user: user,
+        timestamp: timestamp
       });
       res.status(201).send("sent");
     }
