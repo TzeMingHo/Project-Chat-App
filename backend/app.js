@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://tzemingho-chatapp-server-frontend.hosting.codeyourfuture.io"
+}));
 app.use(express.json());
 const port = 4000;
 
@@ -22,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.get("/messages", (req, res) => {
   const since = parseInt(req.query.since);
+
   if (isNaN(since)) {
     return res.json(chatHistory);
   }
@@ -34,7 +37,7 @@ app.get("/messages", (req, res) => {
   const callback = (message) => res.json([message])
   waitingRoom.push(callback);
 
-  const seconds = 30;
+  const seconds = 25;
   const miliseconds = 1000;
 
   const timeout = setTimeout(() => {

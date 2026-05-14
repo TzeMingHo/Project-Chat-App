@@ -2,6 +2,7 @@ const state = {
   messageString: "",
   userString: "",
   backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io",
+  // backendURL: "http://localhost:4000",
   messages: [],
 }
 
@@ -42,7 +43,7 @@ async function chatDisplay() {
   const chatDisplayArea = document.getElementById("chat-display-area");
   chatDisplayArea.innerHTML = '';
   const chatHistoryArray = state.messages;
-  if (!chatHistoryArray) {
+  if (chatHistoryArray.length == 0) {
     chatDisplayArea.append(createEmptyMessage());
   } else {
     chatDisplayArea.append(...createMessageThreads(chatHistoryArray));
@@ -53,6 +54,7 @@ const keepFetchingMessages = async () => {
     const lastMessageTime = state.messages.length > 0 ? state.messages[state.messages.length - 1].timestamp : null;
     const queryString = lastMessageTime ? `?since=${lastMessageTime}` : "";
     const url = `${state.backendURL}/messages${queryString}`;
+    console.log(url)
     try {
       const rawResponse = await fetch(url);
       const response = await rawResponse.json();
@@ -61,7 +63,7 @@ const keepFetchingMessages = async () => {
         chatDisplay();
       }
     } catch (error) {
-      console.log("Failed on connection")
+      console.log(`Failed on connection: ${error}`)
     }
     setTimeout(keepFetchingMessages, 100);
 }
