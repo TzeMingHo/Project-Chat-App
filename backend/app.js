@@ -10,7 +10,7 @@ const chatHistory = [
   {
     message: "Welcome to the channel.",
     user: "System",
-    timestamp: new Date().getTime(),
+    timestamp: 1778679493997,
   },
 ];
 
@@ -18,9 +18,13 @@ app.get("/", (req, res) => {
   res.json(chatHistory);
 });
 
-app.get("/message", (req, res) => {
-  const {since} = req.query;
-
+app.get("/messages", (req, res) => {
+  const since = parseInt(req.query.since);
+  if (isNaN(since)) {
+    return res.json(chatHistory);
+  }
+  const newMessages = chatHistory.filter(({timestamp}) => timestamp > since);
+  res.json(newMessages);
 })
 
 app.post("/", (req, res) => {

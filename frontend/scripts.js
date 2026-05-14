@@ -3,12 +3,13 @@ const state = {
   userString: "",
   // backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io"
   backendURL: "http://localhost:4000",
+  messages: [],
 }
 
 
 function createEmptyMessage() {
   const emptyMessage = document.createElement("p");
-  emptyMessage.textContent("Everyone is being quite, say something.");
+  emptyMessage.textContent = "Everyone is being quite, say something.";
   return emptyMessage;
 }
 
@@ -41,7 +42,7 @@ async function fetchChatHistory() {
   try {
     const response = await fetch(state.backendURL);
     const chatHistoryArray = await response.json();
-    return chatHistoryArray;
+    return state.messages = chatHistoryArray;
   } catch (error) {
     console.log(`Failed to fetch chat history`);
   }
@@ -50,12 +51,25 @@ async function fetchChatHistory() {
 async function chatDisplay() {
   const chatDisplayArea = document.getElementById("chat-display-area");
   chatDisplayArea.innerHTML = '';
-  const chatHistoryArray = await fetchChatHistory();
+  const chatHistoryArray = state.messages;
   if (!chatHistoryArray) {
     chatDisplayArea.append(createEmptyMessage());
   } else {
     chatDisplayArea.append(...createMessageThreads(chatHistoryArray));
   }
+}
+
+const keepFetchingMessages = async () => {
+    const lastMessageTime = state.messages.length > 0 ? state.messages[state.messages.length - 1].timestamp : null;
+    const queryString = lastMessageTime ? `?since=${lastMessageTime}` : "";
+    const url = `${state.backendURL}/messages${queryString}`;
+    const rawResponse = await fetch(url);
+    const response = await rawResponse.json();
+    if (response.length > 0) {
+      state.messages.push(...response);
+      chatDisplay();
+    }
+    setTimeout(keepFetchingMessages, 100);
 }
 
 function messageInputReset() {
@@ -122,6 +136,6 @@ function messageInputHandler() {
 }
 
 window.onload = async () => {
-  await chatDisplay();
+  keepFetchingMessages();
   messageInputHandler();
 };
