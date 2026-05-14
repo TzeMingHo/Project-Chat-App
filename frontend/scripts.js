@@ -1,8 +1,7 @@
 const state = {
   messageString: "",
   userString: "",
-  // backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io"
-  backendURL: "http://localhost:4000",
+  backendURL: "https://tzemingho-chatapp-server-backend.hosting.codeyourfuture.io",
   messages: [],
 }
 
@@ -38,15 +37,6 @@ function createMessageThreads(chatHistoryArray) {
   });
 }
 
-async function fetchChatHistory() {
-  try {
-    const response = await fetch(state.backendURL);
-    const chatHistoryArray = await response.json();
-    return state.messages = chatHistoryArray;
-  } catch (error) {
-    console.log(`Failed to fetch chat history`);
-  }
-}
 
 async function chatDisplay() {
   const chatDisplayArea = document.getElementById("chat-display-area");

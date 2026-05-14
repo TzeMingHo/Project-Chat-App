@@ -12,7 +12,7 @@ const chatHistory = [
   {
     message: "Welcome to the channel.",
     user: "System",
-    timestamp: 1778679493997,
+    timestamp: new Date().getTime(),
   },
 ];
 
