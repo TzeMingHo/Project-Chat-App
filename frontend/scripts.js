@@ -63,11 +63,15 @@ const keepFetchingMessages = async () => {
     const lastMessageTime = state.messages.length > 0 ? state.messages[state.messages.length - 1].timestamp : null;
     const queryString = lastMessageTime ? `?since=${lastMessageTime}` : "";
     const url = `${state.backendURL}/messages${queryString}`;
-    const rawResponse = await fetch(url);
-    const response = await rawResponse.json();
-    if (response.length > 0) {
-      state.messages.push(...response);
-      chatDisplay();
+    try {
+      const rawResponse = await fetch(url);
+      const response = await rawResponse.json();
+      if (response.length > 0) {
+        state.messages.push(...response);
+        chatDisplay();
+      }
+    } catch (error) {
+      console.log("Failed on connection")
     }
     setTimeout(keepFetchingMessages, 100);
 }

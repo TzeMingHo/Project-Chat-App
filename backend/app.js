@@ -6,6 +6,8 @@ app.use(cors());
 app.use(express.json());
 const port = 4000;
 
+const waitingRoom = [];
+
 const chatHistory = [
   {
     message: "Welcome to the channel.",
@@ -24,7 +26,24 @@ app.get("/messages", (req, res) => {
     return res.json(chatHistory);
   }
   const newMessages = chatHistory.filter(({timestamp}) => timestamp > since);
-  res.json(newMessages);
+
+  if (newMessages.length > 0) {
+    return res.json(newMessages);
+  }
+
+  const callback = (message) => res.json([message])
+  waitingRoom.push(callback);
+
+  const seconds = 30;
+  const miliseconds = 1000;
+
+  const timeout = setTimeout(() => {
+    const index = waitingRoom.indexOf(callback);
+    if (index !== -1) {
+      waitingRoom.splice(index, 1)
+      res.send([])
+    }
+  }, seconds * miliseconds)
 })
 
 app.post("/", (req, res) => {
@@ -34,11 +53,17 @@ app.post("/", (req, res) => {
       res.status(406).json({ error: "Empty message or user are not allowed." });
       return;
     } else {
-      chatHistory.push({
+      const newMessage = {
         message: message,
         user: user,
         timestamp: timestamp
-      });
+      }
+      chatHistory.push(newMessage);
+
+      while(waitingRoom.length > 0) {
+        const callback = waitingRoom.pop();
+        callback(newMessage);
+      }      
       res.status(201).send("sent");
     }
   } catch (error) {
